@@ -11,11 +11,8 @@ using System.Threading.Tasks;
 
 namespace ClientConvertisseurV2.ViewModels
 {
- 
-    public class ConvertisseurEuroViewModel: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+    public class ConvertisseurDevisesViewModel:CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
-
-
         private ObservableCollection<Devise> devises = new ObservableCollection<Devise>();
         private Double resultat;
         private Double nb1;
@@ -63,8 +60,8 @@ namespace ClientConvertisseurV2.ViewModels
             }
         }
         public IRelayCommand BtnSetConversion { get; }
-       
-        public ConvertisseurEuroViewModel()
+
+        public ConvertisseurDevisesViewModel()
         {
             getDataOnLoadAsync();
             BtnSetConversion = new RelayCommand(ActionSetConversion);
@@ -74,7 +71,7 @@ namespace ClientConvertisseurV2.ViewModels
         {
             WSService service = new WSService("https://localhost:7232/api/");
             List<Devise> result = await service.GetDevisesAsync("Devises");
-                Devises = new ObservableCollection<Devise>(result);
+            Devises = new ObservableCollection<Devise>(result);
         }
 
         public void ActionSetConversion()
@@ -85,7 +82,7 @@ namespace ClientConvertisseurV2.ViewModels
                 MessageAsync("Erreur", "Vous devez selectionner une devise !");
                 return;
             }
-            Resultat = Nb1* UneDevise.Taux;
+            Resultat = Nb1 / UneDevise.Taux;
         }
         private async void MessageAsync(string title, string content)
         {
@@ -98,5 +95,6 @@ namespace ClientConvertisseurV2.ViewModels
             noWifiDialog.XamlRoot = App.MainRoot.XamlRoot;
             ContentDialogResult result = await noWifiDialog.ShowAsync();
         }
+
     }
 }
